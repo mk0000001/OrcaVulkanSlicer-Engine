@@ -19,6 +19,7 @@ if (TARGET OpenVDB::openvdb)
 endif()
 
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
+option(SLIC3R_ENABLE_VULKAN_SLICER "Build the experimental deterministic Vulkan slicer backend" OFF)
 
 set(lisbslic3r_sources
     AABBMesh.cpp
@@ -473,6 +474,9 @@ set(lisbslic3r_sources
     MultiNozzleUtils.cpp
     GCode/ToolOrderUtils.hpp
     GCode/ToolOrderUtils.cpp
+    Gpu/GpuExactGeometry.hpp
+    Gpu/VulkanSlicer.hpp
+    Gpu/VulkanSlicer.cpp
     FlushVolPredictor.hpp
     FlushVolPredictor.cpp
 )
@@ -489,6 +493,12 @@ add_library(libslic3r STATIC ${lisbslic3r_sources}
     "${CMAKE_CURRENT_BINARY_DIR}/libslic3r_version.h"
     ${OpenVDBUtils_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${lisbslic3r_sources})
+
+if (SLIC3R_ENABLE_VULKAN_SLICER)
+    find_package(Vulkan 1.2 REQUIRED)
+    target_link_libraries(libslic3r PRIVATE Vulkan::Vulkan)
+    target_compile_definitions(libslic3r PRIVATE SLIC3R_ENABLE_VULKAN_SLICER=1)
+endif ()
 
 if (SLIC3R_STATIC)
     set(CGAL_Boost_USE_STATIC_LIBS ON CACHE BOOL "" FORCE)
