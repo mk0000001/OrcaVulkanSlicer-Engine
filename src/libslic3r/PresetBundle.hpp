@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 2.7 seconds
+Output:
 #ifndef slic3r_PresetBundle_hpp_
 #define slic3r_PresetBundle_hpp_
 
@@ -230,7 +233,8 @@ public:
                              ForwardCompatibilitySubstitutionRule rule,
                              int& overwrite,
                              std::vector<std::string>& result,
-                             const std::string& bundle_dir = "");
+                             const std::string& bundle_dir = "",
+                             bool resolve_qidi_system_inherits = false);
                              
     void save_user_presets(AppConfig& config, std::map<std::string, std::string>& need_to_delete_list);
     void check_and_fix_user_presets_syncinfo(const std::string& user_id);
@@ -568,3 +572,4 @@ ENABLE_ENUM_BITMASK_OPERATORS(PresetBundle::LoadConfigBundleAttribute)
 } // namespace Slic3r
 
 #endif /* slic3r_PresetBundle_hpp_ */
+
